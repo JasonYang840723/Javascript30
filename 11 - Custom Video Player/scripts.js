@@ -21,6 +21,7 @@ function updateButton() {
 
 function skip() {
   video.currentTime += parseFloat(this.dataset.skip);
+  // parseFloat() 將字串轉換為以十進位表示的浮點數。parseFloat() 僅接受一個參數。
 }
 
 function handleRangeUpdate() {

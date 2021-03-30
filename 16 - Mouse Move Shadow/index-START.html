@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mouse Shadow</title>
+  </head>
+  <body>
+    <div class="hero">
+      <h1 contenteditable>🔥WOAH!</h1>
+    </div>
+
+    <style>
+      html {
+        color: black;
+        font-family: sans-serif;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: black;
+      }
+
+      h1 {
+        text-shadow: 10px 10px 0 rgba(0, 0, 0, 1);
+        font-size: 100px;
+      }
+    </style>
+
+    <script>
+      const hero = document.querySelector('.hero');
+      const text = hero.querySelector('h1');
+      const walk = 500; // 500px
+
+      function shadow(e) {
+        const { offsetWidth: width, offsetHeight: height } = hero;
+        //其實就是整個視窗大小
+        let { offsetX: x, offsetY: y } = e;
+        //	我們發現當MOUSEEVENT發生在目標的子元素時offsetX&Y會重置數值為0,0。
+
+        if (this !== e.target) {
+          //此時this是hero,e.target是我們事件實際發生的元素，我們希望x,y座標可以延續表示在視窗上的位置，所以當mouse不在hero上時我們要加上，滑過目標的座標(視窗座標=目前的x&y(已歸零)+e.target.offsetLeft&Top)
+          x = x + e.target.offsetLeft;
+          y = y + e.target.offsetTop;
+        }
+        const xWalk = Math.round((x / width) * walk - walk / 2);
+        const yWalk = Math.round((y / height) * walk - walk / 2);
+        //walk是我們最高陰影的長度座標, 假如視窗寬1000,座標位置x在500,那它佔的比例就是1/2,換算成walk 500px*1/2=250px，我們還要陰影在短一點在就是0拉，其實就是我們要陰影最多250px~-250px的長度的意思
+        text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(255,0,255,0.7),
+      ${xWalk * -1}px ${yWalk}px 0 rgba(0,255,255,0.7),
+      ${yWalk}px ${xWalk * -1}px 0 rgba(0,255,0,0.7),
+      ${yWalk * -1}px ${xWalk}px 0 rgba(0,0,255,0.7)
+    `;
+      }
+      hero.addEventListener('mousemove', shadow);
+    </script>
+  </body>
+</html>

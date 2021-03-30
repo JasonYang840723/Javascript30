@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Key Detection</title>
+    <script
+      type="text/javascript"
+      src="https://www.cornify.com/js/cornify.js"
+    ></script>
+  </head>
+  <body>
+    <script>
+      const pressed = [];
+      const secretCode = 'wesbos';
+
+      window.addEventListener('keyup', (e) => {
+        pressed.push(e.key);
+        //接下來超過6個字我們就要把最前面的字刪掉，把最新的自從後面補上，仔細看我們是怎麼做出這種效果的
+        pressed.splice(
+          -secretCode.length - 1,
+          pressed.length - secretCode.length
+        );
+        //首先先了解splice第一個參數是指起始位置，第二個參數是指要刪除幾個(注意當是負值時他不會刪除任何的元素)
+        if (pressed.join('').includes(secretCode)) {
+          console.log('DING DING!');
+          cornify_add();
+        }
+      });
+    </script>
+  </body>
+</html>
