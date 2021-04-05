@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Click and Drag</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="items">
+      <div class="item item1">01</div>
+      <div class="item item2">02</div>
+      <div class="item item3">03</div>
+      <div class="item item4">04</div>
+      <div class="item item5">05</div>
+      <div class="item item6">06</div>
+      <div class="item item7">07</div>
+      <div class="item item8">08</div>
+      <div class="item item9">09</div>
+      <div class="item item10">10</div>
+      <div class="item item11">11</div>
+      <div class="item item12">12</div>
+      <div class="item item13">13</div>
+      <div class="item item14">14</div>
+      <div class="item item15">15</div>
+      <div class="item item16">16</div>
+      <div class="item item17">17</div>
+      <div class="item item18">18</div>
+      <div class="item item19">19</div>
+      <div class="item item20">20</div>
+      <div class="item item21">21</div>
+      <div class="item item22">22</div>
+      <div class="item item23">23</div>
+      <div class="item item24">24</div>
+      <div class="item item25">25</div>
+    </div>
+
+    <script>
+      const slider = document.querySelector('.items');
+      let isDown = false;
+      let startX;
+      let scrollLeft;
+      slider.addEventListener('mousedown', (e) => {
+        isDown = ture;
+        slider.classList.add('active');
+        startX = e.pageX - slider.offsetLeft;
+        //e.pageX代表MOUSEDOWN發生在頁面上的實際位置，我們希望X座標起點從容器裡.items開始，所以我們扣掉slider.offsetLeft
+        scrollLeft = slider.scrollLeft;
+        //儲存scroll bar一開始mousedwon的位置
+      });
+      slider.addEventListener('mouseleave', () => {
+        isDown = false;
+        slider.classList.remove('active');
+      });
+      slider.addEventListener('mouseup', () => {
+        isDown = false;
+        slider.classList.remove('active');
+      });
+      slider.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        //在mousemove過程中滑鼠的x座標
+        // console.log(x,startX);starX儲存mousedown時的滑鼠位置。
+        const walk = x - startX;
+        //在滑動過程中不斷取得滑動距離
+        slider.scrollLeft = scrollLeft - walk;
+        //重點：如果直接指定walk，會有不斷跳轉的情形發生
+      });
+    </script>
+  </body>
+</html>

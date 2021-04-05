@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Whack A Mole!</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Whack-a-mole! <span class="score">0</span></h1>
+    <button onClick="startGame()">Start!</button>
+
+    <div class="game">
+      <div class="hole hole1">
+        <div class="mole"></div>
+      </div>
+      <div class="hole hole2">
+        <div class="mole"></div>
+      </div>
+      <div class="hole hole3">
+        <div class="mole"></div>
+      </div>
+      <div class="hole hole4">
+        <div class="mole"></div>
+      </div>
+      <div class="hole hole5">
+        <div class="mole"></div>
+      </div>
+      <div class="hole hole6">
+        <div class="mole"></div>
+      </div>
+    </div>
+
+    <script>
+      const holes = document.querySelectorAll('.hole');
+      const scoreBoard = document.querySelector('.score');
+      const moles = document.querySelectorAll('.mole');
+      let lastHole;
+      let timeUp = false;
+      let score = 0;
+      function randomTime(min, max) {
+        return Math.round(Math.random() * (max - min) + min);
+      }
+      //目標產生隨機時間
+
+      function randomHole(holes) {
+        const idx = Math.floor(Math.random() * holes.length);
+        //隨機產生動的0~6數字,holes.length=6
+        const hole = holes[idx];
+        if (hole === lastHole) {
+          //假如回傳的hole node一樣就在重新執行randomHole一次
+          console.log('Ah nah thats the same one bud');
+          return randomHole(holes);
+        }
+        lastHole = hole;
+        //因為我們只有6個洞選中重複的機率很高，所以我們先把上次選中的存進來
+        return hole;
+      }
+      //選中隨機幾個hole node,nodeList
+
+      function peep() {
+        const time = randomTime(200, 1000);
+        const hole = randomHole(holes);
+        hole.classList.add('up');
+        setTimeout(() => {
+          hole.classList.remove('up');
+          if (!timeUp) peep();
+          //假如timeUp=true就停止遊戲
+        }, time);
+        //經過隨機時間他會移除.up class
+      }
+      function startGame() {
+        scoreBoard.textContent = 0;
+        timeUp = false;
+        score = 0;
+        peep();
+        setTimeout(() => (timeUp = true), 10000);
+      }
+      function bonk(e) {
+        if (!e.isTrusted) return; // cheater!
+        score++;
+        this.parentNode.classList.remove('up');
+        scoreBoard.textContent = score;
+      }
+
+      moles.forEach((mole) => mole.addEventListener('click', bonk));
+      //點擊到mole時+1分
+    </script>
+  </body>
+</html>
